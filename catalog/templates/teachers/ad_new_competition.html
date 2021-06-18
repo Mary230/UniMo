@@ -1,0 +1,166 @@
+{% extends 'index.html' %}
+{% load crispy_forms_filters %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <style>
+        #id_test_file {
+            display: none;
+        }
+
+        #id_data_file {
+            display: none;
+        }
+
+        #id_desc {
+            height: 224px;
+        }
+
+        #id_true_answer_file {
+            display: none;
+        }
+
+        #nonlabel .requiredField {
+            display: none;
+        }
+
+
+        .input__wrapper {
+            width: 100%;
+            position: relative;
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        .input__file {
+            opacity: 0;
+            visibility: hidden;
+            position: absolute;
+        }
+
+        .input__file-icon-wrapper {
+            height: 60px;
+            width: 60px;
+            margin-right: 15px;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            align-items: center;
+            -webkit-box-pack: center;
+            -ms-flex-pack: center;
+            justify-content: center;
+            border-right: 1px solid #fff;
+        }
+
+        .input__file-button-text {
+            line-height: 1;
+            margin-top: 1px;
+        }
+
+        .input__file-button {
+            width: 100%;
+            max-width: 290px;
+            height: 60px;
+            background: rgba(0, 5, 134, 0.78);
+            color: #ffffff;
+            font-size: 1.125rem;
+            font-weight: 700;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            align-items: center;
+            -webkit-box-pack: start;
+            -ms-flex-pack: start;
+            justify-content: flex-start;
+            border-radius: 3px;
+            cursor: pointer;
+            margin: 0 auto;
+        }
+
+        .dialogshow {
+            display: block !important;
+        }
+    </style>
+    <div class="banner-wrapper bg-light">
+        <div id="index_banner" class="banner-vertical-center-index container-fluid "
+             style="background-image: url('{% static 'img/home-banner.jpeg' %}'); height: 93vh">
+            <div class=" rounded" style="
+background: linear-gradient(to bottom, rgba(225,230,236,0.91), rgba(225,230,236,0.25)); height: 93vh">
+
+                <div class="col-md-8 col-sm-10 col-12 container">
+                    <h2 class="pt-5">Новое соревнование</h2>
+                    <form method="post" novalidate>
+                        <div class="row">
+                            {% csrf_token %}
+                            <div class="col-sm">
+                                {{ form.name|as_crispy_field }}
+                                {{ form.desc|as_crispy_field }}
+                            </div>
+                            <div class="col-sm">
+                                {{ form.date_of_start|as_crispy_field }}
+                                {{ form.date_of_finish|as_crispy_field }}
+                                {{ form.subject|as_crispy_field }}
+                                {{ form.state|as_crispy_field }}
+                                {{ form.complexity|as_crispy_field }}
+                            </div>
+                        </div>
+                        <div id="nonlabel">
+                            <div class="row pt-2">
+                                <hr>
+                                <div class="col-sm">
+                                    {{ form1.test_file|as_crispy_field }}<br>
+                                    <label for="id_test_file" class="input__file-button">
+                        <span class="input__file-icon-wrapper"><img class="input__file-icon"
+                                                                    src="{% static 'img/icon-upload-file.png' %}"
+                                                                    alt="Выбрать файл" width="25"></span>
+                                        <span class="input__file-button-text">Обучающая выборка</span>
+                                    </label>
+                                </div>
+                                <div class="col-sm">
+                                    {{ form1.data_file|as_crispy_field }}<br>
+                                    <label for="id_data_file" class="input__file-button">
+                        <span class="input__file-icon-wrapper"><img class="input__file-icon"
+                                                                    src="{% static 'img/icon-upload-file.png' %}"
+                                                                    alt="Выбрать файл" width="25"></span>
+                                        <span class="input__file-button-text">Тестовые данные</span>
+                                    </label>
+                                </div>
+                                <div class="col-sm">
+                                    {{ form1.true_answer_file|as_crispy_field }}<br>
+                                    <label for="id_true_answer_file" class="input__file-button">
+                        <span class="input__file-icon-wrapper"><img class="input__file-icon"
+                                                                    src="{% static 'img/icon-upload-file.png' %}"
+                                                                    alt="Выбрать файл" width="25"></span>
+                                        <span class="input__file-button-text">Проверочные данные</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="container pt-3 ">
+                            <div class="row">
+                                <hr>
+                                <div class="col-sm">
+
+                                </div>
+                                <div class="col-sm">
+
+                                </div>
+                                <div class="col-sm">
+                                    <input type="submit" class="btn btn-lg btn-warning px-5" value="Сохранить">
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block content %}
+    <div class="banner-wrapper bg-light">
+        <div id="index_banner" class="banner-vertical-center-index container-fluid pt-2"
+             style="background-image: url('{% static 'img/home-banner.jpeg' %}'); min-height: 100vh">
+        <a href="{% url 'students:competition_list'%}" class="btn btn-outline-dark mb-2">
+            Вернуться к списку соревнований</a>
+            <div class="card container" style="background-color: #f6f9fe">
+                <table class="table mb-0">
+                    <thead>
+                    <tr>
+                        <th>Соревнование</th>
+                        <th>Очки</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for taken_competition in taken_competitions %}
+                        <tr>
+                            <td> <a href="{% url 'students:one_competition' taken_competition.competition.id %}"
+                                    class="btn btn-light">{{ taken_competition.competition.name }}</a></td>
+
+                            <td>{{ taken_competition.score }}</td>
+                            <td class="text-right">
+                                <a href="{% url 'students:download_study_data' taken_competition.competition.id %}"
+                                   class="btn btn-outline-warning">Скачать обучающие данные</a>
+                                <a href="{% url 'students:download_test_data' taken_competition.competition.id %}"
+                                   class="btn btn-outline-warning">Скачать тестовые данные</a>
+                            </td>
+                            <td class="text-right">
+                                <a href="{% url 'students:download_answer_file' taken_competition.competition.id %}"
+                                   class="btn btn-primary">Загрузить ответ</a>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td class="bg-light text-center font-italic" colspan="3">Вы пока не выбрали ни одного соревнования:(
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

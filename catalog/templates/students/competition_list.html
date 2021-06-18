@@ -1,0 +1,55 @@
+{% extends 'index.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="banner-wrapper bg-light">
+        <div id="index_banner" class="banner-vertical-center-index container-fluid pt-5"
+             style="background-image: url('{% static 'img/home-banner.jpeg' %}'); height: 100vh">
+        <a href="{% url 'students:take_competition'%}" class="btn btn-outline-dark mb-2" style="margin-left: 80%">
+            Мои соревнования</a>
+            <div class="card" style="max-width: 85%; margin: auto">
+
+                <table class="table mb-0">
+                    <thead>
+                    <tr class="h-50">
+                        <th>Название соревнования</th>
+                        <th>Сложность</th>
+                        <th>Дата старта</th>
+
+                        <th>Тип</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for comp in competitions %}
+                        {% if comp.state == 'n' %}
+                            <tr>
+                            <td class="align-middle">{{ comp.name }}</td>
+                            {% if comp.complexity == 'e' %}
+                                <td class="align-middle" style="color: rgba(1,70,0,0.85)"> Легкий</td>
+                            {% elif comp.complexity == 'n' %}
+                                <td class="align-middle" style="color: rgb(178,127,0)"> Средний</td>
+                            {% else %}
+                                <td class="align-middle" style="color: rgba(132,0,0,0.85)"> Сложный</td>
+                            {% endif %}
+                            <td class="align-middle">{{ comp.date_of_finish|date }} </td>
+                            <td class="align-middle"
+                                style="color: {{ comp.subject.color }} ">{{ comp.subject.name }} </td>
+
+                            <td class="text-middle">
+                                <a href="{% url 'students:add_new_competition' comp.id %}" class="btn btn-primary ">Начать→</a>
+                            </td>
+                        {% endif %}
+                    </tr>
+                    {% empty %}
+                        <tr>
+                            <td class="bg-light text-center font-italic" colspan="4">У вас пока нет соревнований :(
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

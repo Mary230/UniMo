@@ -1,0 +1,165 @@
+{% extends 'index.html' %}
+{% load crispy_forms_filters %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+    <style>
+        #id_model_file {
+            display: none;
+        }
+
+        #id_data_file {
+            display: none;
+        }
+
+        .requiredField {
+            display: none;
+        }
+
+        .input__wrapper {
+            width: 100%;
+            position: relative;
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        .input__file {
+            opacity: 0;
+            visibility: hidden;
+            position: absolute;
+        }
+
+        .input__file-icon-wrapper {
+            height: 60px;
+            width: 60px;
+            margin-right: 15px;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            align-items: center;
+            -webkit-box-pack: center;
+            -ms-flex-pack: center;
+            justify-content: center;
+            border-right: 1px solid #fff;
+        }
+
+        .input__file-button-text {
+            line-height: 1;
+            margin-top: 1px;
+        }
+
+        .input__file-button {
+            width: 100%;
+            max-width: 290px;
+            height: 60px;
+            background: #ffac05;
+            color: #000;
+            font-size: 1.125rem;
+            font-weight: 700;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            align-items: center;
+            -webkit-box-pack: start;
+            -ms-flex-pack: start;
+            justify-content: flex-start;
+            border-radius: 3px;
+            cursor: pointer;
+            margin: 0 auto;
+        }
+
+        .dialogshow {
+            display: block !important;
+        }
+    </style>
+    <script>
+        function add_field() {
+            var field = '<span>Label: <input type="text"><small>(ft)</small></span>\r\n';
+            document.getElementById('div_for_coolab').innerHTML += field;
+        }
+
+        function ffff() {
+            exampleModal = document.getElementById('exampleModal');
+            exampleModal.classList.add('dialogshow')
+            exampleModal.classList.add('show');
+            exampleModal.setAttribute('aria-hidden', 'false')
+
+
+        }
+
+    </script>
+    <div class="banner-wrapper bg-light">
+        <div id="index_banner" class="banner-vertical-center-index container-fluid"
+             style="background-image: url('{% static 'img/home-banner.jpeg' %}'); height: 100vh">
+            <div style=" background-color: rgba(255,255,255,0.44); height: 100vh" class="pt-3">
+                <div class="d-grid gap-2 col-sm-6 mx-auto"
+                     style="border-color: #ffac05 rgba(0, 5, 134, 0.54); border-style: dashed dotted">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="container-sm" style="text-align: center">
+                            <h3 class="h3" style="padding-top: 50px">Загрузка файлов для соревнования
+                                "MyFirstCompetition"</h3>
+                        </div>
+                        {{ form.model_file|as_crispy_field }}<br>
+                        <label for="id_model_file" class="input__file-button">
+                        <span class="input__file-icon-wrapper"><img class="input__file-icon"
+                                                                    src="{% static 'img/icon-upload-file.png' %}"
+                                                                    alt="Выбрать файл" width="25"></span>
+                            <span class="input__file-button-text">Загрузите модель</span>
+                        </label>
+                        {{ form.data_file|as_crispy_field }}<br>
+                        <label for="id_data_file" class="input__file-button">
+                        <span class="input__file-icon-wrapper"><img class="input__file-icon"
+                                                                    src="{% static 'img/icon-upload-file.png' %}"
+                                                                    alt="Выбрать файл" width="25"></span>
+                            <span class="input__file-button-text">Загрузите данные</span>
+                        </label>
+                        <div class="container pl-5">
+                            {{ form.is_public|as_crispy_field }}
+                        </div>
+                        <div class="d-grid gap-2 col-sm-5 mx-auto" style="margin-top: 20px; padding-bottom: 20px">
+                            <button type="submit" class="btn btn-primary btn-lg">Загрузить файлы</button>
+                        </div>
+
+                    </form>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                        Добавить ссылку на Google Colab
+                    </button>
+                    <!-- Modal -->
+                    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+                         aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Оставьте ссылку на модель</h5>
+                                    <button type="button" class="btn close btn-lg" data-dismiss="modal"
+                                            aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <form method="post">
+                                    {% csrf_token %}
+
+                                    <div class="modal-body">
+                                        {{ form1.href|as_crispy_field }}
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-outline-danger" data-dismiss="modal">
+                                            Отмена
+                                        </button>
+                                        <input type="submit" class="btn btn-outline-primary" value="Сохранить">
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <a class="nav-link" href="{% url 'students:take_competition' %}"><i
+                        class='bx bx-arrow-back bx-sm text-primary'></i></a>
+            </div>
+        </div>
+{% endblock %}

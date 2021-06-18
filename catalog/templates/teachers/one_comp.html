@@ -1,0 +1,161 @@
+{% extends 'index.html' %}
+{% load crispy_forms_filters %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+    <style>
+        .mycol {
+            min-height: 70px;
+        }
+    </style>
+    <div class="banner-wrapper bg-light">
+        <div id="index_banner" class="banner-vertical-center-index container-fluid pt-2"
+             style="background-image: url('{% static 'img/home-banner-1.jpeg' %}'); min-height: 100vh">
+            <div class="container">
+                <a href="{% url 'teachers:competition_list' %}"
+                   class="btn btn-outline-dark mb-2">Вернуться к списку
+                    соревнований</a>
+                <div class="row">
+                    <div class="col-sm">
+                        <ul class="list-group">
+                            <li class="list-group-item">Название: {{ competition.name }}</li>
+                            <li class="list-group-item">Тип задачи: {{ subject }}</li>
+                            <li class="list-group-item">Предмет: {% if competition.complexity == 'e' %}Легкий
+                            {% elif competition.complexity == 'n' %}Средний{% else %}Сложный{% endif %}
+                            </li>
+                            <li class="list-group-item">Дата старта: {{ competition.date_of_start }}</li>
+                            <li class="list-group-item">Дата окончания: {{ competition.date_of_finish }}
+                                <button type="button" class="btn  btn-circle" data-toggle="modal" data-target="#exampleModal" style="margin-left: 40%"><span
+                                        class="iconify" data-icon="fa-solid:pen" data-inline="false"></span></button>
+
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-sm">
+                        <ul class="list-group">
+                            <li class="list-group-item">Описание:
+                                <button type="button" class="btn  btn-circle" style="margin-left: 75%"><span
+                                        class="iconify" data-icon="fa-solid:pen" data-inline="false"></span></button>
+                                <hr>
+                                {{ competition.desc }}</li>
+                            {% if competitionfile %}
+                                <li class="list-group-item pb-0">
+                                    <p class="p-0">Данные cоревнования:</p>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="btn-group" role="group" aria-label="Basic example">
+                                        <a href="{% url 'students:download_study_data' competition.id %}"
+                                           class="btn btn-outline-warning">Скачать обучающие данные</a>
+
+                                        <a href="{% url 'students:download_test_data' competition.id %}"
+                                           class="btn btn-outline-warning">Скачать тестовые данные</a>
+                                    </div>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </div>
+
+                </div>
+                <div class="container">
+                    <div class="row pt-5">
+                        <div class="col-4 p-0">
+                            <ul class="list-group list-group-flush" style="min-height: 100%">
+                                {% if answerFiles %}
+                                    {% for an in answerFiles %}
+                                        <li class="list-group-item  mycol ">
+                                            <p class="font-weight-light text-danger">
+                                                {{ an.student.user.first_name }} {{ an.student.user.last_name }}
+                                                ({{ an.student.user.email }}):</p>
+                                        </li>
+                                    {% endfor %}{% else %}
+
+                                    <p class="font-weight-light h6">
+                                        Ответов пока нет</p>
+
+                                {% endif %}
+
+                            </ul>
+                        </div>
+                        <div class="col-4 p-0">
+                            <ul class="list-group list-group-flush" style="min-height: 100%">
+                                {% if answerFiles %}
+                                    {% for an in answerFiles %}
+
+
+                                        <li class="list-group-item mycol list-group-item-primary">
+                                            <div class="btn-group" role="group" aria-label="Basic example"
+                                                 style="margin-left: 10%">
+                                                <a href="{% url 'students:download_model_data' competition.id %}"
+                                                   class="btn btn-outline-primary px-xxl-5" data-toggle="tooltip"
+                                                   data-placement="top"
+                                                   title="{{ an.model_file }}">Модель
+                                                </a>
+
+                                                <a href="{% url 'students:download_answer_data' competition.id %}"
+                                                   class="btn btn-outline-primary px-xxl-5" data-toggle="tooltip"
+                                                   data-placement="top"
+                                                   title="{{ an.data_file }}">Данные
+                                                </a>
+                                            </div>
+                                        </li>
+
+                                    {% endfor %}
+                                {% endif %}</ul>
+                        </div>
+
+                        <div class="col-3 p-0">
+                            <ul class="list-group list-group-flush" style="min-height: 100%">
+                                {% if colabHref %}
+                                    {% for ch in colabHref %}
+                                        <li class="list-group-item mycol list-group-item-light">
+                                            <a href="{{ ch.href }}" data-toggle="tooltip" data-placement="top"
+                                               title="{{ ch.href }}"
+                                            >Ссылка на Google Colab</a>
+                                        </li>
+                                    {% endfor %}
+                                {% endif %}
+                            </ul>
+
+
+                        </div>
+                        <div class="col-1 p-0">
+                            <ul class="list-group list-group-flush">
+                                {% for point in points %}
+                                    <li class="list-group-item mycol list-group-item-primary">
+                                        <p class="font-weight-light">
+                                            {{ point.score }} </p></li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+                         aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Изменение описания</h5>
+                                    <button type="button" class="btn close btn-lg" data-dismiss="modal"
+                                            aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <form method="post">
+                                    {% csrf_token %}
+
+                                    <div class="modal-body">
+                                        <textarea></textarea>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-outline-danger" data-dismiss="modal">
+                                            Отмена
+                                        </button>
+                                        <input type="submit" class="btn btn-outline-primary" value="Сохранить">
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+{% endblock %}

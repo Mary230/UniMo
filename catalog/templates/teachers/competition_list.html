@@ -1,0 +1,54 @@
+{% extends 'index.html' %}
+{% load static %}
+{#{% load crispy_forms_tags %}#}
+
+{% block content %}
+    {#  {% include 'classroom/students/_header.html' with active='new' %}#}
+    <div class="banner-wrapper bg-light">
+        <div id="index_banner" class="banner-vertical-center-index container-fluid pt-5"
+             style="background-image: url('{% static 'img/home-banner.jpeg' %}'); height: 100vh">
+            <div class="card container" style="max-width: 85%; margin: auto;background-color: #f6f9fe">
+                <table class="table mb-0">
+                    <thead>
+                    <tr class="h-50">
+                        <th>Название соревнования</th>
+                        <th>Сложность</th>
+                        <th>Дата старта</th>
+                        <th>Дата окончания</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for comp in competitions %}
+                        {% if comp.state == 'n' %}
+                            <tr>
+                            <td class="align-middle"><a href="{% url 'teachers:one_competition' comp.id %}"
+                                    class="btn btn-light">{{ comp.name }}</a></td></td>
+                            {% if comp.complexity == 'e' %}
+                                <td class="align-middle" style="color: rgba(1,70,0,0.85)"> Легкий</td>
+                            {% elif comp.complexity == 'n' %}
+                                <td class="align-middle" style="color: rgb(178,127,0)"> Средний</td>
+                            {% else %}
+                                <td class="align-middle" style="color: rgba(132,0,0,0.85)"> Сложный</td>
+                            {% endif %}
+                            <td class="align-middle">{{ comp.date_of_start|date }} </td>
+                            <td class="align-middle">{{ comp.date_of_finish|date }} </td>
+
+
+                        {% endif %}
+                    </tr>
+                    {% empty %}
+                        <tr>
+                            <td class="bg-light text-center font-italic" colspan="4">Вы пока не создали ни одного
+                                соревнования:(
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <div class="d-grid gap-2 col-sm-5 mx-auto" style="margin-top: 20px; padding-bottom: 20px">
+                    <a href="{% url 'teachers:add_new_competition' %}" class="btn btn-primary">Создать новое соревнование</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

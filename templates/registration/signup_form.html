@@ -1,0 +1,29 @@
+{% extends 'index.html' %}
+{% load crispy_forms_filters %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <div class="banner-wrapper bg-light">
+        <div id="index_banner" class="banner-vertical-center-index container-fluid pt-3"
+             style="background-image: url('{% static 'img/home-banner.jpeg' %}'); height: 105vh">
+            <div class=" rounded" style="
+    margin-left: 20%;
+    margin-right: 20%;
+background: rgba(225,231,238,0.64)">
+
+                <div class="col-md-8">
+                    <h2>Регистрация</h2>
+                    <form method="post" novalidate>
+                        {% csrf_token %}
+                        {% crispy form %}
+{#
+                        <button type="submit" class="btn btn-primary mt-lg-2">Продолжить</button>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

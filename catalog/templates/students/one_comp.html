@@ -1,0 +1,137 @@
+{% extends 'index.html' %}
+{% load crispy_forms_filters %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+    <div class="banner-wrapper bg-light">
+        <div id="index_banner1" class="banner-vertical-center-index container-fluid pt-2"
+             style=" min-height: 80vh">
+            <div class=" container mt-4">
+                <a href="{% url 'students:take_competition' %}"
+                   class="btn btn-outline-dark mb-2">Вернуться к списку
+                    соревнований</a>
+                <div class="row mt-3">
+                    <div class="col-sm">
+                        <ul class="list-group">
+                            <li class="list-group-item">Название: {{ competition.name }}</li>
+                            <li class="list-group-item">Тип задачи: {{ subject }}</li>
+                            <li class="list-group-item">Автор: {{ author }}</li>
+                            <li class="list-group-item">Предмет: {% if competition.complexity == 'e' %}Легкий
+                            {% elif competition.complexity == 'n' %}Средний{% else %}Сложный{% endif %}
+                            </li>
+                            <li class="list-group-item">Дата старта: {{ competition.date_of_start }}</li>
+                            <li class="list-group-item">Дата окончания: {{ competition.date_of_finish }}</li>
+                        </ul>
+                    </div>
+                    <div class="col-sm">
+                        <ul class="list-group " style="min-height: 100%">
+                            {% if competitionfile %}
+                                <li class="list-group-item pb-0">
+                                    <p class="p-0">Данные cоревнования:</p>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="btn-group" role="group" aria-label="Basic example">
+                                        <a href="{% url 'students:download_study_data' competition.id %}"
+                                           class="btn btn-outline-warning">Скачать обучающие данные</a>
+
+                                        <a href="{% url 'students:download_test_data' competition.id %}"
+                                           class="btn btn-outline-warning">Скачать тестовые данные</a>
+                                    </div>
+                                </li>
+                            {% endif %}
+                            {% if answerFiles %}
+                                <li class="list-group-item pb-0">
+                                    <p class="font-weight-light">Мои ответы:</p>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="btn-group" role="group" aria-label="Basic example">
+                                        <a href="{% url 'students:download_model_data' competition.id %}"
+                                           class="btn btn-outline-primary" data-toggle="tooltip" data-placement="top"
+                                           title="{{ answerFiles.model_file }}">Модель
+                                        </a>
+
+                                        <a href="{% url 'students:download_answer_data' competition.id %}"
+                                           class="btn btn-outline-primary" data-toggle="tooltip" data-placement="top"
+                                           title="{{ answerFiles.data_file }}">Данные
+                                        </a>
+                                    </div>
+                                </li>
+                                {% else %}
+                                <a href="{% url 'students:download_answer_file' competition.id %}"
+                                   class="btn btn-primary mt-3">Загрузить ответ</a>
+                            {% endif %}
+                            {% if colabHref %}
+                                <li class="list-group-item">
+                                    <a href="{{ colabHref.href }}" data-toggle="tooltip" data-placement="top"
+                                       title="{{ colabHref.href }}"
+                                    >Ссылка на Google Colab</a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </div>
+
+                </div>
+                <div class="row pt-5">
+                    <div class="col-sm">
+                        <ul class="list-group">
+                            <li class="list-group-item">Описание:
+                                <hr>
+                                {{ competition.desc }}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="service-tag py-4 mt-lg-5  mb-lg-5 bg-secondary">
+                <div class="col-md-12">
+                    <ul class="nav d-flex justify-content-center">
+                        <li class="nav-item mx-lg-4">
+                            <h1 class="banner-heading h3 text-light display-3 mb-0  mx-0 px-0">Ответы пользователей</h1>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+    <div class="card container mb-lg-5 pt-lg-2" style="margin: auto;background-color: #f6f9fe">
+        <table class="table ">
+            <thead>
+            <tr class="h-50">
+                <th>Пользователь</th>
+                <th>Модель</th>
+                <th>Ссылка на внешний источник</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for an in otherAnswerFiles %}
+                <tr>
+                    <td class="align-middle">
+                        {{ an.student.user.first_name }} {{ an.student.user.last_name }}
+                        ({{ an.student.user.email }})
+                    </td>
+                    <td class="align-middle">
+                        <a href="{% url 'students:download_model_data' competition.id %}"
+                           class="btn btn-outline-primary px-xxl-5" data-toggle="tooltip"
+                           data-placement="top"
+                           title="{{ an.model_file }}">Скачать модель
+                        </a>
+                    </td>
+                    <td>
+                        <a href="#" data-toggle="tooltip" data-placement="top"
+                           title="Ссылка на Google Colab"
+                        >Ссылка на Google Colab</a>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td class="bg-light text-center font-italic" colspan="4">Готовых моделей пока нет
+                    </td>
+                </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+
+    </div>
+{% endblock %}
